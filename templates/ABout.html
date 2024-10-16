@@ -15,14 +15,14 @@
         </a>
         <div class="menu">
             <div class="menu-item">
-                <a href="home.html">Home</a>
+                <a href="{{ url_for('templates', filename='templates/index.html') }}">Home</a>
             </div>
             <div class="menu-item">
                 <a href="#" class="menu-link">Web Apps▼</a>
                 <div class="dropdown">
-                    <a href="DeepSP.html">DeepSP</a>
-                    <a href="DeepViscosity.html">DeepViscosity</a>
-                    <a href="AbDev.html">AbDev</a>
+                    <a href="{{ url_for('templates', filename='templates/DeepSP.html') }}">DeepSP</a>
+                    <a href="{{ url_for('templates', filename='templates/DeepViscosity.html') }}">DeepViscosity</a>
+                    <a href="{{ url_for('templates', filename='templates/AbDev.html') }}">AbDev</a>
                 </div>
             </div>
             <div class="menu-item">
@@ -34,7 +34,7 @@
                 </div>
             </div>
             <div class="menu-item">
-                <a href="#">About</a>
+                <a href="{{ url_for('templates', filename='templates/ABout.html') }}">About</a>
             </div>
         </div>
     </header>
