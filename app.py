@@ -41,7 +41,7 @@ def home():
 
 @app.route('/about')
 def about():
-    return render_template('About.html')
+    return render_template('ABout.html')
 
 @app.route('/DeepSP', methods=['GET','POST'])
 def deep_sp():
