@@ -31,13 +31,34 @@ def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
+
+
 @app.route('/', methods=['GET','POST'])
-
 def home():
-    csv_path = request.args.get('csv_path', None)
+    #csv_path = request.args.get('csv_path', None)
     #print("csv_path:", csv_path)  # This will print the value of csv_path to your console
-    return render_template('index.html', csv_path=csv_path)
+    return render_template('index.html')#, csv_path=csv_path)
 
+@app.route('/about')
+def about():
+    return render_template('About.html')
+
+@app.route('/DeepSP', methods=['GET','POST'])
+def deep_sp():
+    csv_path = request.args.get('csv_path', None)
+    return render_template('DeepSP.html', csv_path=csv_path)
+
+@app.route('/DeepViscosity', methods=['GET','POST'])
+def deep_viscosity():
+    csv_path = request.args.get('csv_path', None)
+    return render_template('DeepViscosity.html', csv_path=csv_path)
+
+@app.route('/AbDev', methods=['GET','POST'])
+def ab_dev():
+    csv_path = request.args.get('csv_path', None)
+    return render_template('AbDev.html', csv_path=csv_path)
+
+    
 def write_to_csv(data, filename):
     filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
     with open(filepath, 'w', newline='') as csvfile:
@@ -46,8 +67,6 @@ def write_to_csv(data, filename):
         writer.writeheader()
         writer.writerow(data)
     return filepath
-
-
 
 
 @app.route('/upload', methods=['GET', 'POST'])
