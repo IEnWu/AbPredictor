@@ -203,11 +203,11 @@ def process_file(filepath):
     df.to_csv('uploads/DeepSP_descriptors.csv', index=False)
 
     csv_filename = 'DeepSP_descriptors.csv'
-    csv_path = os.path.join('uploads', csv_filename)
-    df.to_csv(csv_path, index=False)
+    predictions_path = os.path.join('uploads', csv_filename)
+    df.to_csv(predictions_path, index=False)
     
     #print(f"Processed file saved to: {csv_path}")
-    return csv_path
+    return predictions_path
 
 
 
