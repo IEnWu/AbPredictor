@@ -54,7 +54,7 @@ def deep_sp():
         filepath = write_to_csv(mab_data, 'input_data.csv')
 
         try:
-            descriptors_path, predictions_path = deep_sp_process_file(filepath)
+            predictions_path = deep_sp_process_file(filepath)
             return render_template('DeepSP.html', 
                                    predictions_path=os.path.basename(predictions_path))
         except Exception as e:
