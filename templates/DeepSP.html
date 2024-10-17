@@ -135,7 +135,7 @@
                             {% endfor %}
                         </table>
                     </div>
-                    <p>Download the result file here: <a href="{{ url_for('download_file', filename='DeepSP_descriptors.csv')}}">{{ csv_path }}</a></p>
+                    <p>Download the result file here: <a href="{{ url_for('download_file', filename='DeepSP_descriptors.csv')}}">{{ predictions_path }}</a></p>
                 {% else %}
                     <p>No results available.</p>
                 {% endif %}
