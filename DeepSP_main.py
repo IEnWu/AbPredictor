@@ -200,14 +200,11 @@ def process_file(filepath):
             'SCM_neg_CDRH1','SCM_neg_CDRH2','SCM_neg_CDRH3','SCM_neg_CDRL1','SCM_neg_CDRL2','SCM_neg_CDRL3','SCM_neg_CDR','SCM_neg_Hv','SCM_neg_Lv','SCM_neg_Fv',
             'SCM_pos_CDRH1','SCM_pos_CDRH2','SCM_pos_CDRH3','SCM_pos_CDRL1','SCM_pos_CDRL2','SCM_pos_CDRL3','SCM_pos_CDR','SCM_pos_Hv','SCM_pos_Lv','SCM_pos_Fv']
     df = pd.concat([pd.DataFrame(name_list), pd.DataFrame(sap_pos), pd.DataFrame(scm_neg), pd.DataFrame(scm_pos)], ignore_index=True, axis=1,); df.columns = features
-    df.to_csv('uploads/DeepSP_descriptors.csv', index=False)
 
-    csv_filename = 'DeepSP_descriptors.csv'
-    predictions_path = os.path.join('uploads', csv_filename)
+    predictions_path = 'uploads/DeepSP_descriptors.csv'
     df.to_csv(predictions_path, index=False)
     
     #print(f"Processed file saved to: {csv_path}")
     return predictions_path
-
 
 
