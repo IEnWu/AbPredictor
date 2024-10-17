@@ -79,9 +79,20 @@ def deep_viscosity():
 
         try:
             descriptors_path, predictions_path = deep_viscosity_process_file(filepath)
+            
+            with open(descriptors_path, 'r', newline='') as csvfile:
+                reader = csv.reader(csvfile)
+                descriptors_data = list(reader)  
+
+            with open(predictions_path, 'r', newline='') as csvfile:
+                reader = csv.reader(csvfile)
+                predictions_data = list(reader)  
+            
             return render_template('DeepViscosity.html', 
-                                    descriptors_path=os.path.basename(descriptors_path), 
-                                    predictions_path=os.path.basename(predictions_path))
+                                   descriptors_data=descriptors_data,  
+                                   descriptors_path=os.path.basename(descriptors_path), 
+                                   predictions_data=predictions_data,  
+                                   predictions_path=os.path.basename(predictions_path))
         except Exception as e:
             flash(f'Error processing file: {e}')
             return redirect(request.url)
