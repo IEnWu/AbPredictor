@@ -45,72 +45,7 @@ def deep_sp():
         if file and allowed_file(file.filename):
             filepath = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
             file.save(filepath)
-            try:
-                descriptors_path, predictions_path = deep_sp_process_file(filepath)
-                return render_template('DeepSP.html', 
-                                       descriptors_path=os.path.basename(descriptors_path), 
-                                       predictions_path=os.path.basename(predictions_path))
-            except Exception as e:
-                flash(f'Error processing file: {e}')
-                return redirect(request.url)
-    return render_template('DeepSP.html')
 
-# DeepViscosity 路由及處理
-@app.route('/DeepViscosity', methods=['GET', 'POST'])
-def deep_viscosity():
-    if request.method == 'POST':
-        file = request.files.get('file')
-        if file and allowed_file(file.filename):
-            filepath = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
-            file.save(filepath)
-            try:
-                descriptors_path, predictions_path = deep_viscosity_process_file(filepath)
-                return render_template('DeepViscosity.html', 
-                                       descriptors_path=os.path.basename(descriptors_path), 
-                                       predictions_path=os.path.basename(predictions_path))
-            except Exception as e:
-                flash(f'Error processing file: {e}')
-                return redirect(request.url)
-    return render_template('DeepViscosity.html')
-
-# AbDev 路由及處理
-@app.route('/AbDev', methods=['GET', 'POST'])
-def ab_dev():
-    if request.method == 'POST':
-        file = request.files.get('file')
-        if file and allowed_file(file.filename):
-            filepath = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
-            file.save(filepath)
-            try:
-                descriptors_path, predictions_path = ab_dev_process_file(filepath)
-                return render_template('AbDev.html', 
-                                       descriptors_path=os.path.basename(descriptors_path), 
-                                       predictions_path=os.path.basename(predictions_path))
-            except Exception as e:
-                flash(f'Error processing file: {e}')
-                return redirect(request.url)
-    return render_template('AbDev.html')
-
-# 寫入 CSV 功能
-def write_to_csv(data, filename):
-    filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-    with open(filepath, 'w', newline='') as csvfile:
-        fieldnames = ['Name', 'Heavy_Chain', 'Light_Chain']
-        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-        writer.writeheader()
-        writer.writerow(data)
-    return filepath
-
-# 文件上傳及處理通用接口
-@app.route('/upload', methods=['GET', 'POST'])
-def upload_file():
-    if request.method == 'POST':
-        file = request.files.get('file')  
-        if file and file.filename and allowed_file(file.filename):
-            filename = url_quote(file.filename)
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-
-        # 處理表單數據並寫入 CSV
         mab_data = {
             'Name': request.form.get('mab_name', ''),
             'Heavy_Chain': request.form.get('heavy_chain', ''),
@@ -120,25 +55,110 @@ def upload_file():
 
         try:
             descriptors_path, predictions_path = deep_sp_process_file(filepath)
-            with open(descriptors_path, 'r', newline='') as csvfile:
-                reader = csv.reader(csvfile)
-                descriptors_data = list(reader)
-
-            with open(predictions_path, 'r', newline='') as csvfile:
-                reader = csv.reader(csvfile)
-                predictions_data = list(reader)
-
-            return render_template('index.html',
-                                   descriptors_data=descriptors_data,
-                                   descriptors_path=os.path.basename(descriptors_path),
-                                   predictions_data=predictions_data,
+            return render_template('DeepSP.html', 
+                                   descriptors_path=os.path.basename(descriptors_path), 
                                    predictions_path=os.path.basename(predictions_path))
         except Exception as e:
             flash(f'Error processing file: {e}')
             return redirect(request.url)
-    return render_template('index.html')
+    return render_template('DeepSP.html')
 
-# 文件下載接口
+# DeepViscosity 
+@app.route('/DeepViscosity', methods=['GET', 'POST'])
+def deep_viscosity():
+    if request.method == 'POST':
+        file = request.files.get('file')
+        if file and allowed_file(file.filename):
+            filepath = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
+            file.save(filepath)
+        mab_data = {
+            'Name': request.form.get('mab_name', ''),
+            'Heavy_Chain': request.form.get('heavy_chain', ''),
+            'Light_Chain': request.form.get('light_chain', '')
+        }
+        filepath = write_to_csv(mab_data, 'input_data.csv')
+
+        try:
+            descriptors_path, predictions_path = deep_viscosity_process_file(filepath)
+            return render_template('DeepViscosity.html', 
+                                    descriptors_path=os.path.basename(descriptors_path), 
+                                    predictions_path=os.path.basename(predictions_path))
+        except Exception as e:
+            flash(f'Error processing file: {e}')
+            return redirect(request.url)
+    return render_template('DeepViscosity.html')
+
+# AbDev 
+@app.route('/AbDev', methods=['GET', 'POST'])
+def ab_dev():
+    if request.method == 'POST':
+        file = request.files.get('file')
+        if file and allowed_file(file.filename):
+            filepath = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
+            file.save(filepath)
+
+        mab_data = {
+            'Name': request.form.get('mab_name', ''),
+            'Heavy_Chain': request.form.get('heavy_chain', ''),
+            'Light_Chain': request.form.get('light_chain', '')
+        }
+        filepath = write_to_csv(mab_data, 'input_data.csv')
+         
+        try:
+            descriptors_path, predictions_path = ab_dev_process_file(filepath)
+            return render_template('AbDev.html', 
+                                    descriptors_path=os.path.basename(descriptors_path), 
+                                    predictions_path=os.path.basename(predictions_path))
+        except Exception as e:
+            flash(f'Error processing file: {e}')
+            return redirect(request.url)
+            
+    return render_template('AbDev.html')
+
+def write_to_csv(data, filename):
+    filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+    with open(filepath, 'w', newline='') as csvfile:
+        fieldnames = ['Name', 'Heavy_Chain', 'Light_Chain']
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+        writer.writeheader()
+        writer.writerow(data)
+    return filepath
+
+# @app.route('/upload', methods=['GET', 'POST'])
+# def upload_file():
+#     if request.method == 'POST':
+#         file = request.files.get('file')  
+#         if file and file.filename and allowed_file(file.filename):
+#             filename = url_quote(file.filename)
+#             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+
+#         mab_data = {
+#             'Name': request.form.get('mab_name', ''),
+#             'Heavy_Chain': request.form.get('heavy_chain', ''),
+#             'Light_Chain': request.form.get('light_chain', '')
+#         }
+#         filepath = write_to_csv(mab_data, 'input_data.csv')
+
+#         try:
+#             descriptors_path, predictions_path = deep_sp_process_file(filepath)
+#             with open(descriptors_path, 'r', newline='') as csvfile:
+#                 reader = csv.reader(csvfile)
+#                 descriptors_data = list(reader)
+
+#             with open(predictions_path, 'r', newline='') as csvfile:
+#                 reader = csv.reader(csvfile)
+#                 predictions_data = list(reader)
+
+#             return render_template('index.html',
+#                                    descriptors_data=descriptors_data,
+#                                    descriptors_path=os.path.basename(descriptors_path),
+#                                    predictions_data=predictions_data,
+#                                    predictions_path=os.path.basename(predictions_path))
+#         except Exception as e:
+#             flash(f'Error processing file: {e}')
+#             return redirect(request.url)
+#     return render_template('index.html')
+
 @app.route('/download/<filename>', methods=['GET'])
 def download_file(filename):
     try:
