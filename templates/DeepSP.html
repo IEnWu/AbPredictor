@@ -122,11 +122,11 @@
             <div id="result">
                 <h1>> Result</h1>
                 
-                {% if csv_path %}
+                {% if predictions_path %}
                     
                     <div style="overflow-x: auto; max-height: 400px;">               
                         <table style="border: 1px solid black; border-collapse: collapse;">
-                            {% for row in csv_data %}
+                            {% for row in predictions_data %}
                                 <tr>
                                     {% for item in row %}
                                         <td style="border: 1px solid black; padding: 8px;">{{ item }}</td>
