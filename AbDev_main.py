@@ -322,7 +322,7 @@ def process_file(filepath):
     'Tm': format_predictions(prediction_Tm)
 })
 
-    prediction_path = 'uploads/Biophysical_Prediction.csv'
-    df2.to_csv(prediction_path, index=False)
+    predictions_path = 'uploads/Biophysical_Prediction.csv'
+    df2.to_csv(predictions_path, index=False)
 
-    return descriptors_path, prediction_path
+    return descriptors_path, predictions_path

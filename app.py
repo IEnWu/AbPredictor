@@ -56,7 +56,6 @@ def deep_sp():
         try:
             descriptors_path, predictions_path = deep_sp_process_file(filepath)
             return render_template('DeepSP.html', 
-                                   descriptors_path=os.path.basename(descriptors_path), 
                                    predictions_path=os.path.basename(predictions_path))
         except Exception as e:
             flash(f'Error processing file: {e}')
