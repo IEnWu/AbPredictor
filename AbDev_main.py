@@ -22,9 +22,9 @@ from Bio.SeqRecord import SeqRecord
 
 def format_predictions(predictions):
     if len(predictions.shape) > 1:
-        formatted = np.round(predictions, 3)
+        formatted = np.round(predictions, 2)
     else:
-        formatted = [round(pred, 3) for pred in predictions]
+        formatted = [round(pred, 2) for pred in predictions]
     return formatted
 
 def process_file(filepath):

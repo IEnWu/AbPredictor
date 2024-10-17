@@ -17,7 +17,13 @@ from Bio import SeqIO
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 #################
-
+def format_predictions(predictions):
+    if len(predictions.shape) > 1:
+        formatted = np.round(predictions, 2)
+    else:
+        formatted = [round(pred, 2) for pred in predictions]
+    return formatted
+    
 def process_file(filepath):
 
     dataset = pd.read_csv(filepath)
@@ -184,7 +190,7 @@ def process_file(filepath):
     loaded_model.load_weights("Conv1D_regression_SCMpos.h5")
     loaded_model.compile(optimizer='adam', loss='mae', metrics=['mae'])
     scm_pos = loaded_model.predict(X)
-
+    
 
     # scmneg
     json_file = open('Conv1D_regressionSCMneg.json', 'r')
@@ -199,7 +205,7 @@ def process_file(filepath):
     features = ['Name', 'SAP_pos_CDRH1','SAP_pos_CDRH2','SAP_pos_CDRH3','SAP_pos_CDRL1','SAP_pos_CDRL2','SAP_pos_CDRL3','SAP_pos_CDR','SAP_pos_Hv','SAP_pos_Lv','SAP_pos_Fv',
             'SCM_neg_CDRH1','SCM_neg_CDRH2','SCM_neg_CDRH3','SCM_neg_CDRL1','SCM_neg_CDRL2','SCM_neg_CDRL3','SCM_neg_CDR','SCM_neg_Hv','SCM_neg_Lv','SCM_neg_Fv',
             'SCM_pos_CDRH1','SCM_pos_CDRH2','SCM_pos_CDRH3','SCM_pos_CDRL1','SCM_pos_CDRL2','SCM_pos_CDRL3','SCM_pos_CDR','SCM_pos_Hv','SCM_pos_Lv','SCM_pos_Fv']
-    df = pd.concat([pd.DataFrame(name_list), pd.DataFrame(sap_pos), pd.DataFrame(scm_neg), pd.DataFrame(scm_pos)], ignore_index=True, axis=1,); df.columns = features
+    df = pd.concat([pd.DataFrame(name_list), pd.DataFrame(format_predictions(sap_pos)), pd.DataFrame(format_predictions(scm_neg)), pd.DataFrame(format_predictions(scm_pos))], ignore_index=True, axis=1,); df.columns = features
 
     predictions_path = 'uploads/DeepSP_descriptors.csv'
     df.to_csv(predictions_path, index=False)
