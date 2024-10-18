@@ -95,9 +95,9 @@
             </style>
             <h3>Our web applications offer a range of functionalities to accomplish various tasks:</h3>
             <ul>
-                <li><a href="DeepSP.html">DeepSP</a>: Predict the spatial properties of different regions in mAb. </li>
-                <li><a href="DeepViscosity.html">DeepViscosity</a>: Predict and classify whether an mAb has high or low viscosity.</li>
-                <li><a href="AbDev.html">AbDev</a>: Predict 12 distinct biophysical properties of mAbs.</li>
+                <li><a href="{{ url_for('deep_sp') }}">DeepSP</a>: Predict the spatial properties of different regions in mAb. </li>
+                <li><a href="{{ url_for('deep_viscosity')}}">DeepViscosity</a>: Predict and classify whether an mAb has high or low viscosity.</li>
+                <li><a href="{{ url_for('ab_dev') }}">AbDev</a>: Predict 12 distinct biophysical properties of mAbs.</li>
             </ul>
         </div>  
         <div id="sequence-submission">
