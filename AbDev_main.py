@@ -334,4 +334,14 @@ def process_file(filepath):
     except Exception as e:
         print(f"Error deleting files: {e}")
 
+    FOLDER='uploads'
+    input_data_path = os.path.join(FOLDER, 'input_data.csv')
+    try:
+        os.remove(input_data_path)
+        print(f"{input_data_path} has been deleted.")
+    except FileNotFoundError:
+        print(f"{input_data_path} not found. File might have been deleted already.")
+    except Exception as e:
+        print(f"Error deleting {input_data_path}: {e}")
+        
     return descriptors_path, predictions_path
