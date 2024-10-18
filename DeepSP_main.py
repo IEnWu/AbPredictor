@@ -210,6 +210,15 @@ def process_file(filepath):
     predictions_path = 'uploads/DeepSP_descriptors.csv'
     df.to_csv(predictions_path, index=False)
     
+    try:
+        os.remove('seq_H.fasta')
+        os.remove('seq_L.fasta')
+        os.remove('seq_aligned_H.csv')
+        os.remove('seq_aligned_KL.csv')
+        os.remove('seq_aligned_HL.txt')
+    except Exception as e:
+        print(f"Error deleting files: {e}")
+
     #print(f"Processed file saved to: {csv_path}")
     return predictions_path
 
